@@ -1,17 +1,38 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
 import Header from './components/Header/Header'
 import Blogs from './components/Blogs/Blogs'
+import Bookmarks from './components/Bookmarks/Bookmarks'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [bookmarks, setBookmarks] = useState([]);
+  const [readingTime, setReadingTime] = useState(0)
+
+
+  const handleAddToBookmark = blog => {
+    const newBookmarks = [...bookmarks, blog];
+    setBookmarks(newBookmarks);
+  }
+
+  const handleMarkAsRead = (id,time) => {
+   const newReadingTime = readingTime + time;
+   setReadingTime(newReadingTime);
+  // remove the read blog from bookmark
+  // console.log('remove bookmark', id)
+  const remainingBookmarks = bookmarks.filter(bookmark => bookmark.id !== id);
+  setBookmarks(remainingBookmarks)
+
+
+
+  }
 
   return (
     <>
       <Header></Header>
-      <Blogs></Blogs>
+      <div className='md:flex max-w-7xl mx-auto'>
+        <Blogs handleAddToBookmark={handleAddToBookmark} handleMarkAsRead={handleMarkAsRead}></Blogs>
+        <Bookmarks bookmarks={bookmarks} readingTime={readingTime}></Bookmarks>
+      </div>
     </>
   )
 }
